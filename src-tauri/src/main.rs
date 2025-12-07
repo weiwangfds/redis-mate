@@ -27,5 +27,5 @@
 /// 如果应用程序启动失败，将 panic 并显示错误信息。
 fn main() {
     // 调用库模块中的运行函数来启动应用程序
-    tauri_redis_cilent_lib::run()
+    redis_mate_lib::run()
 }
