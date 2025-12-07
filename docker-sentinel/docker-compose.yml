@@ -1,0 +1,32 @@
+services:
+  master:
+    image: redis:7-alpine
+    container_name: redis-master
+    ports:
+      - "16379:6379"
+    command: redis-server --appendonly yes
+
+  slave:
+    image: redis:7-alpine
+    container_name: redis-slave
+    ports:
+      - "16380:6379"
+    command: redis-server --slaveof host.docker.internal 16379 --replica-announce-ip 127.0.0.1 --replica-announce-port 16380
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - master
+
+  sentinel:
+    image: redis:7-alpine
+    container_name: redis-sentinel
+    ports:
+      - "26379:26379"
+    volumes:
+      - ./sentinel.conf:/etc/redis/sentinel.conf
+    command: redis-sentinel /etc/redis/sentinel.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - master
+      - slave

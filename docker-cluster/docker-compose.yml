@@ -1,0 +1,12 @@
+services:
+  redis-cluster:
+    image: grokzen/redis-cluster:latest
+    container_name: redis-cluster
+    environment:
+      - IP=127.0.0.1
+      - BIND_ADDRESS=0.0.0.0
+      - INITIAL_PORT=7010
+      - CLUSTER_NODES=6
+      - CLUSTER_REPLICAS=1
+    ports:
+      - "7010-7015:7010-7015"

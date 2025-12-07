@@ -1,0 +1,86 @@
+[package]
+# Redis 客户端桌面应用程序包信息
+name = "redis-mate"
+version = "0.1.0"
+description = "基于 Tauri 框架的 Redis 客户端桌面应用程序，支持单机、哨兵和集群模式"
+authors = ["wei"]
+edition = "2021"
+
+# 更多配置选项请参考：https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# 库配置说明
+# `_lib` 后缀虽然看起来冗余，但对于 Windows 平段是必要的，
+# 可以确保库名称与二进制名称不冲突。
+# 参考问题：https://github.com/rust-lang/cargo/issues/8519
+name = "redis_mate_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+# 构建依赖
+[build-dependencies]
+# Tauri 构建工具，用于生成应用程序构建配置
+# 包含资源打包、图标处理等功能
+tauri-build = { version = "2", features = [] }
+
+# 运行时依赖
+[dependencies]
+# Tauri 核心框架，提供跨平台桌面应用开发能力
+tauri = { version = "2", features = [] }
+
+# Tauri 插件：文件打开功能
+# 用于在系统默认应用程序中打开文件和 URL
+tauri-plugin-opener = "2"
+
+# Tauri 插件：日志记录功能
+# 提供统一的日志记录接口，支持文件和控制台输出
+tauri-plugin-log = "2"
+
+# Rust 标准日志记录库
+# 提供结构化日志记录宏（info!, warn!, error! 等）
+log = "0.4"
+
+# 错误处理库
+# 提供灵活的错误类型和上下文信息，简化错误处理
+anyhow = "1"
+
+# Redis 客户端库
+# 功能特性：
+# - aio: 异步 I/O 支持
+# - tokio-comp: Tokio 运行时兼容性
+# - cluster: Redis 集群支持
+# - connection-manager: 连接管理器，支持自动重连
+redis = { version = "1.0.0", features = ["aio", "tokio-comp", "cluster", "connection-manager", "sentinel"] }
+
+# Tokio 异步运行时
+# 功能特性：
+# - macros: 提供异步编程宏
+# - rt: 运行时支持
+# - time: 时间和定时器功能
+tokio = { version = "1", features = ["macros", "rt", "time"] }
+
+# 序列化和反序列化库
+# 功能特性：
+# - derive: 自动派生序列化 trait
+serde = { version = "1", features = ["derive"] }
+
+# JSON 序列化支持
+# 为 serde 提供 JSON 格式的序列化/反序列化支持
+serde_json = "1"
+
+# SQL 工具包，提供类型安全的数据库访问
+# 功能特性：
+# - runtime-tokio: Tokio 运行时支持
+# - sqlite: SQLite 数据库支持
+# 提供编译时 SQL 检查、连接池、迁移等功能
+sqlx = { version = "0.8.6", features = ["runtime-tokio", "sqlite"] }
+
+# 异步工具库
+# 提供 Stream、Future、AsyncRead、AsyncWrite 等 trait
+# 用于处理异步 I/O 操作和流式数据处理
+futures = "0.3"
+
+# 开发依赖（仅在测试和开发时使用）
+[dev-dependencies]
+# 环境变量日志记录器
+# 在开发和测试环境中提供日志输出，支持配置日志级别和格式
+env_logger = "0.11"
