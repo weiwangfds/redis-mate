@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local docker environments (exclude from VCS)
+docker/
+docker-cluster/
+docker-sentinel/
+scripts/
