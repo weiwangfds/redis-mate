@@ -4,7 +4,8 @@ import { ConnectionManager } from "./components/ConnectionManager";
 import { KeyManager } from "./components/KeyManager";
 import { PubSubPanel } from "./components/PubSubPanel";
 import { ClusterInfoPanel } from "./components/ClusterInfoPanel";
-import { ToastProvider } from "./components/ui/Toast";
+import { ToastProvider, useToast } from "./components/ui/Toast";
+import { check as checkUpdate } from "@tauri-apps/plugin-updater";
 import { Database, Radio, Network, ChevronUp, ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "./utils";
 import { getConfig } from "./types/tauri";
@@ -14,6 +15,7 @@ type View = 'keys' | 'pubsub' | 'cluster';
 
 export default function App() {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [selectedConnection, setSelectedConnection] = useState<string>("");
   const [currentView, setCurrentView] = useState<View>('keys');
   const [isCluster, setIsCluster] = useState(false);
@@ -47,6 +49,19 @@ export default function App() {
       localStorage.setItem('app:prefs', JSON.stringify(s));
     } catch {}
   }, [headerCollapsed, connCollapsed]);
+
+  useEffectReact(() => {
+    (async () => {
+      try {
+        const update = await checkUpdate();
+        if (update?.available) {
+          toast('Update available. Downloading...', 'info');
+          await update.downloadAndInstall();
+          toast('Update installed. Restart the app to apply.', 'success');
+        }
+      } catch {}
+    })();
+  }, []);
 
   return (
     <ToastProvider>
@@ -152,4 +167,3 @@ export default function App() {
     </ToastProvider>
   );
 }
-
