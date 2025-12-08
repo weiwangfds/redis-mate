@@ -19,7 +19,6 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Setup Node
@@ -56,4 +55,3 @@ jobs:
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: false
           prerelease: false
-
