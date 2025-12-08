@@ -946,6 +946,12 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         // 应用程序设置和初始化
         .setup(|app| {
+            #[cfg(desktop)]
+            {
+                let _ = app
+                    .handle()
+                    .plugin(tauri_plugin_updater::Builder::new().build());
+            }
             // 获取应用程序句柄的克隆，用于异步任务
             let handle = app.handle().clone();
             
